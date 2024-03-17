@@ -75,7 +75,6 @@ class MainWindow(QMainWindow):
         while True:
             self.app.processEvents()
 
-
     def abrir_ventana_3(self):
         """Abre una nueva ventana y la mantiene abierta hasta que se cierra manualmente."""
         ventana_3 = QMainWindow()
