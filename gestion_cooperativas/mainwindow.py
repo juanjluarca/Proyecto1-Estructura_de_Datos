@@ -1,10 +1,12 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QPushButton, QHBoxLayout
+from userswindow import VentanaUsuarios
 
 
 class MainWindow(QMainWindow):
     def __init__(self, app):
         super().__init__()
+        self.ventana_3 = None
         self.app = app
 
         self.setWindowTitle("Ventana principal")
@@ -76,12 +78,8 @@ class MainWindow(QMainWindow):
             self.app.processEvents()
 
     def abrir_ventana_3(self):
-        """Abre una nueva ventana y la mantiene abierta hasta que se cierra manualmente."""
-        ventana_3 = QMainWindow()
-        ventana_3.setWindowTitle("Usuarios")
-        ventana_3.setFixedSize(640, 480)
-        ventana_3.show()
-
+        self.ventana_3 = VentanaUsuarios("Usuarios", self.app)
+        self.ventana_3.show()
         # Bucle para mantener la ventana abierta hasta que se cierre manualmente.
         while True:
             self.app.processEvents()
