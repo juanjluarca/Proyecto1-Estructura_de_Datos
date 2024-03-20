@@ -1,4 +1,5 @@
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QPushButton
+
 class Asociado:
     def __init__(self, nombre, direccion, telefonos, dpi, nit, archivos_adjuntos=None, referencias_personales=None):
         self.codigo_asociado = random.randint(1000, 9999)
@@ -40,13 +41,14 @@ class Asociado:
         return False
 
 
+
 class VentanaRegistroAsociado(QMainWindow):
-    def __init__(self, app, asociados):
+    def __init__(self, app):
         super().__init__()
-        self.asociados = asociados
         self.setWindowTitle("Registro de Nuevo Asociado")
         self.setGeometry(100, 100, 400, 300)
         self.app = app
+        self.asociados = List()  # Lista de asociados
 
         self.initUI()
 
@@ -90,6 +92,15 @@ class VentanaRegistroAsociado(QMainWindow):
         btn_registrar.clicked.connect(self.registrar_asociado)
         layout.addWidget(btn_registrar)
 
+        self.lista_asociados = QListWidget()
+        layout.addWidget(self.lista_asociados)
+
+        # Botón de eliminación
+        btn_eliminar = QPushButton("Eliminar Cuenta")
+        btn_eliminar.clicked.connect(self.abrir_ventana_eliminar_cuenta)
+        layout.addWidget(btn_eliminar)
+
+
     def registrar_asociado(self):
         nombre = self.input_nombre.text()
         direccion = self.input_direccion.text()
@@ -100,7 +111,9 @@ class VentanaRegistroAsociado(QMainWindow):
         nuevo_asociado = Asociado(nombre, direccion, telefonos, dpi, nit)
         self.asociados.append(nuevo_asociado)
 
+        self.lista_asociados.addItem(f"{nombre} - {nuevo_asociado.codigo_asociado}")
         QMessageBox.information(self, "Registro Exitoso", "El asociado ha sido registrado exitosamente.")
+
 
         self.input_nombre.clear()
         self.input_direccion.clear()
@@ -146,5 +159,3 @@ class VentanaRegistroAsociado(QMainWindow):
                     QMessageBox.warning(self, "Error", "No se pudo encontrar el asociado con el código especificado.")
         else:
             QMessageBox.warning(self, "Error", "No se encontró ningún asociado con el código especificado.")
-
-
