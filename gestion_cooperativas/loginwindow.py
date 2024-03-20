@@ -37,7 +37,7 @@ class VentanaLogin(QMainWindow):
         layout.addWidget(self.input_password)
 
         # Botón para mostrar u ocultar la contraseña
-        self.btn_show_hide_password = QPushButton("")
+        self.btn_show_hide_password = QPushButton("Mostrar contraseña")
         self.btn_show_hide_password.setCheckable(True)
         self.btn_show_hide_password.clicked.connect(self.toggle_show_hide_password)
         layout.addWidget(self.btn_show_hide_password)
@@ -61,7 +61,7 @@ class VentanaLogin(QMainWindow):
         for usuario in self.usuarios:
             if email == usuario.email and password == usuario.password:
                 self.close()
-                window = MainWindow(self.app)
+                window = MainWindow(self.app, self.usuarios)
                 window.show()
                 while True:
                     self.app.processEvents()
