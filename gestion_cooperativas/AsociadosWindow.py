@@ -32,9 +32,6 @@ class Asociado:
         if referencia in self.referencias_personales:
             self.referencias_personales.remove(referencia)
 
-    def eliminar_cuenta(self):
-        # Aquí podría agregar lógica para desactivar la cuenta o eliminarla completamente de la base de datos.
-        pass
 
 class VentanaRegistroAsociado(QMainWindow):
     def __init__(self, app, asociados):
@@ -111,4 +108,4 @@ def main():
     ventana_registro.show()
     sys.exit(app.exec_())
 
-
+main()

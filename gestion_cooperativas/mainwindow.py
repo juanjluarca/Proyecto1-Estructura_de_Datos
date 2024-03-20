@@ -7,6 +7,7 @@ from bankloanwindow import VentanaPrestamos
 class MainWindow(QMainWindow):
     def __init__(self, app, usuarios):
         super().__init__()
+        self.ventana_1 = None
         self.ventana_3 = None
         self.app = app
         self.ventana_2 = None
@@ -59,15 +60,12 @@ class MainWindow(QMainWindow):
         boton_3.clicked.connect(self.abrir_ventana_3)
 
     def abrir_ventana_1(self):
-        """Abre una nueva ventana y la mantiene abierta hasta que se cierra manualmente."""
-        ventana_1 = QMainWindow()
-        ventana_1.setWindowTitle("Gestión de asociados")
-        ventana_1.setFixedSize(640, 480)
-        ventana_1.show()
-
+        self.ventana_1 = VentanaRegistroAsociado("Asociados", self.app)
+        self.ventana_1.show()
         # Bucle para mantener la ventana abierta hasta que se cierre manualmente.
         while True:
             self.app.processEvents()
+
 
     def abrir_ventana_2(self):
         self.ventana_2 = VentanaPrestamos("Préstamos", self.app, self.usuarios)
