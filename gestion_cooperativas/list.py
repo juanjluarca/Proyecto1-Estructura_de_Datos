@@ -162,6 +162,27 @@ class List(Generic[T]):
                 else:
                     current = current.next
 
+    def remove_asociado(self, asociado: T) -> bool:
+        current = self.__head
+        previous = None
+
+        while current:
+            if current.data == asociado:
+                if previous:
+                    previous.next = current.next
+                    if not current.next:
+                        self.__tail = previous
+                else:
+                    self.__head = current.next
+                    if not current.next:
+                        self.__tail = None
+                self.__size -= 1
+                return True
+            previous = current
+            current = current.next
+
+        return False
+
     def is_empty(self):
         return self.__head is None and self.__tail is None
 

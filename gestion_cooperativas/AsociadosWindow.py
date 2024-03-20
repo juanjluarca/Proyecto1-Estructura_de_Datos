@@ -1,5 +1,6 @@
-from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QPushButton
-
+from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QMessageBox
+from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QPushButton, QHBoxLayout, QDialog, QListWidget, QDialogButtonBox
+from PyQt5.QtWidgets import QApplication
 class Asociado:
     def __init__(self, nombre, direccion, telefonos, dpi, nit, archivos_adjuntos=None, referencias_personales=None):
         self.codigo_asociado = random.randint(1000, 9999)
@@ -39,6 +40,7 @@ class Asociado:
                 lista_asociados.remove(asociado)
                 return True
         return False
+
 
 
 
@@ -100,7 +102,6 @@ class VentanaRegistroAsociado(QMainWindow):
         btn_eliminar.clicked.connect(self.abrir_ventana_eliminar_cuenta)
         layout.addWidget(btn_eliminar)
 
-
     def registrar_asociado(self):
         nombre = self.input_nombre.text()
         direccion = self.input_direccion.text()
@@ -114,7 +115,6 @@ class VentanaRegistroAsociado(QMainWindow):
         self.lista_asociados.addItem(f"{nombre} - {nuevo_asociado.codigo_asociado}")
         QMessageBox.information(self, "Registro Exitoso", "El asociado ha sido registrado exitosamente.")
 
-
         self.input_nombre.clear()
         self.input_direccion.clear()
         self.input_telefonos.clear()
@@ -123,23 +123,24 @@ class VentanaRegistroAsociado(QMainWindow):
 
     def abrir_ventana_eliminar_cuenta(self):
         # Ventana para eliminar cuenta
-        ventana_eliminar = QDialog(self)
-        ventana_eliminar.setWindowTitle("Eliminar Cuenta de Asociado")
-        ventana_eliminar.setGeometry(100, 100, 300, 150)
+        self.ventana_eliminar = QDialog(self)
+        self.ventana_eliminar.setWindowTitle("Eliminar Cuenta de Asociado")
+        self.ventana_eliminar.setGeometry(100, 100, 300, 150)
 
         layout = QVBoxLayout()
-        ventana_eliminar.setLayout(layout)
+        self.ventana_eliminar.setLayout(layout)
 
         label_codigo = QLabel("Código de Asociado:")
         input_codigo = QLineEdit()
         layout.addWidget(label_codigo)
         layout.addWidget(input_codigo)
 
-        btn_eliminar = QPushButton("Eliminar Cuenta")
-        btn_eliminar.clicked.connect(lambda: self.eliminar_cuenta(int(input_codigo.text())))
-        layout.addWidget(btn_eliminar)
+        buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        buttons.accepted.connect(lambda: self.eliminar_cuenta(int(input_codigo.text())))
+        buttons.rejected.connect(self.ventana_eliminar.reject)
+        layout.addWidget(buttons)
 
-        ventana_eliminar.exec_()
+        self.ventana_eliminar.show()
 
     def eliminar_cuenta(self, codigo):
         asociado_a_eliminar = None
@@ -153,9 +154,18 @@ class VentanaRegistroAsociado(QMainWindow):
                                                 f"¿Está seguro de eliminar la cuenta del asociado {asociado_a_eliminar.nombre}? Esta acción no se puede deshacer.",
                                                 QMessageBox.Yes | QMessageBox.No)
             if confirmacion == QMessageBox.Yes:
-                if asociado_a_eliminar.eliminar_cuenta(self.asociados):
+                if self.asociados.remove_asociado(asociado_a_eliminar):
                     QMessageBox.information(self, "Eliminación Exitosa", "La cuenta ha sido eliminada correctamente.")
+                    # Actualizar la lista visual de asociados
+                    self.actualizar_lista_asociados()
                 else:
                     QMessageBox.warning(self, "Error", "No se pudo encontrar el asociado con el código especificado.")
         else:
             QMessageBox.warning(self, "Error", "No se encontró ningún asociado con el código especificado.")
+
+    def actualizar_lista_asociados(self):
+        # Limpiar la lista visual de asociados
+        self.lista_asociados.clear()
+        # Volver a agregar los asociados restantes a la lista visual
+        for asociado in self.asociados:
+            self.lista_asociados.addItem(f"{asociado.nombre} - {asociado.codigo_asociado}")
