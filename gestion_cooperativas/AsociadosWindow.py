@@ -32,6 +32,13 @@ class Asociado:
         if referencia in self.referencias_personales:
             self.referencias_personales.remove(referencia)
 
+    def eliminar_cuenta(self, lista_asociados):
+        for asociado in lista_asociados:
+            if asociado.codigo_asociado == self.codigo_asociado:
+                lista_asociados.remove(asociado)
+                return True
+        return False
+
 
 class VentanaRegistroAsociado(QMainWindow):
     def __init__(self, app, asociados):
@@ -101,11 +108,43 @@ class VentanaRegistroAsociado(QMainWindow):
         self.input_dpi.clear()
         self.input_nit.clear()
 
-def main():
-    app = QApplication(sys.argv)
-    asociados = List()
-    ventana_registro = VentanaRegistroAsociado(app, asociados)
-    ventana_registro.show()
-    sys.exit(app.exec_())
+    def abrir_ventana_eliminar_cuenta(self):
+        # Ventana para eliminar cuenta
+        ventana_eliminar = QDialog(self)
+        ventana_eliminar.setWindowTitle("Eliminar Cuenta de Asociado")
+        ventana_eliminar.setGeometry(100, 100, 300, 150)
 
-main()
+        layout = QVBoxLayout()
+        ventana_eliminar.setLayout(layout)
+
+        label_codigo = QLabel("Código de Asociado:")
+        input_codigo = QLineEdit()
+        layout.addWidget(label_codigo)
+        layout.addWidget(input_codigo)
+
+        btn_eliminar = QPushButton("Eliminar Cuenta")
+        btn_eliminar.clicked.connect(lambda: self.eliminar_cuenta(int(input_codigo.text())))
+        layout.addWidget(btn_eliminar)
+
+        ventana_eliminar.exec_()
+
+    def eliminar_cuenta(self, codigo):
+        asociado_a_eliminar = None
+        for asociado in self.asociados:
+            if asociado.codigo_asociado == codigo:
+                asociado_a_eliminar = asociado
+                break
+
+        if asociado_a_eliminar:
+            confirmacion = QMessageBox.question(self, "Confirmar Eliminación",
+                                                f"¿Está seguro de eliminar la cuenta del asociado {asociado_a_eliminar.nombre}? Esta acción no se puede deshacer.",
+                                                QMessageBox.Yes | QMessageBox.No)
+            if confirmacion == QMessageBox.Yes:
+                if asociado_a_eliminar.eliminar_cuenta(self.asociados):
+                    QMessageBox.information(self, "Eliminación Exitosa", "La cuenta ha sido eliminada correctamente.")
+                else:
+                    QMessageBox.warning(self, "Error", "No se pudo encontrar el asociado con el código especificado.")
+        else:
+            QMessageBox.warning(self, "Error", "No se encontró ningún asociado con el código especificado.")
+
+
