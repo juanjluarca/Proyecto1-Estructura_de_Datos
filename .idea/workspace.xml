@@ -8,6 +8,10 @@
     <list default="true" id="52936dbc-7c7f-41a5-93d4-bedc5d7b3391" name="Changes" comment="" />
     <list default="true" id="52936dbc-7c7f-41a5-93d4-bedc5d7b3391" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+
+      <change beforePath="$PROJECT_DIR$/gestion_cooperativas/bankloanwindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/gestion_cooperativas/bankloanwindow.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gestion_cooperativas/list.py" beforeDir="false" afterPath="$PROJECT_DIR$/gestion_cooperativas/list.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gestion_cooperativas/loan.py" beforeDir="false" afterPath="$PROJECT_DIR$/gestion_cooperativas/loan.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gestion_cooperativas/AsociadosWindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/gestion_cooperativas/AsociadosWindow.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gestion_cooperativas/mainwindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/gestion_cooperativas/mainwindow.py" afterDir="false" />
     </list>
@@ -43,6 +47,8 @@
   &quot;keyToString&quot;: {
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Panchito&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;configurable.group.editor&quot;
     &quot;git-widget-placeholder&quot;: &quot;Juan-jose&quot;
 
   <component name="PropertiesComponent"><![CDATA[{
