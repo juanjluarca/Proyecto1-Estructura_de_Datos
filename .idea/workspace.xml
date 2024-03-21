@@ -5,13 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="52936dbc-7c7f-41a5-93d4-bedc5d7b3391" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/gestion_cooperativas/loan.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/Proyecto1-Estructura_de_Datos.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gestion_cooperativas/bankloanwindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/gestion_cooperativas/bankloanwindow.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gestion_cooperativas/list.py" beforeDir="false" afterPath="$PROJECT_DIR$/gestion_cooperativas/list.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gestion_cooperativas/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/gestion_cooperativas/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gestion_cooperativas/loan.py" beforeDir="false" afterPath="$PROJECT_DIR$/gestion_cooperativas/loan.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

@@ -1,12 +1,13 @@
 import random
+from list import List
 class Loan:
-    def __init__(self, user, user_code, money, reason, month_income, warranty, plan_pay, record):
+    def __init__(self, user, user_code, money, reason, month_income, warranty, plan_pay, record: List | None):
         self.user = user
         self.code = str(random.randint(1000, 9999))
         self.user_code = user_code
         self.status = 'Creado'
         self.money = money
-        self.number_pay = plan_pay
+        self.pay_act = money
         self.amount_approved = reason
         self.month_income = month_income
         self.warranty = warranty

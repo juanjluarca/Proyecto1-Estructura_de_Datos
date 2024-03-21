@@ -1,6 +1,7 @@
 
-from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QPushButton, QLabel, QLineEdit, QMessageBox
+from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QPushButton, QLabel, QLineEdit, QMessageBox, QHBoxLayout
 from PyQt5.QtCore import Qt
+from PyQt5.uic import loadUi
 from list import List
 from loan import Loan
 
@@ -13,7 +14,7 @@ class VentanaPrestamos(QMainWindow):
         self.loans = List()
         self.new_window = QMainWindow()
         self.usuarios = usuarios
-        self.pay_record = List()
+        self.pay_record1 = List()
 
 
         # Crear layout principal
@@ -52,6 +53,8 @@ class VentanaPrestamos(QMainWindow):
         boton_cerrar.clicked.connect(self.close)
         boton_loan.clicked.connect(self.request_loan)
         boton_see.clicked.connect(self.show_loans)
+        boton_plan.clicked.connect(self.add_loan)
+        boton_approve.clicked.connect(self.approve_loan)
 
         # Cerrar la ventana principal al cerrar la secundaria
         self.destroyed.connect(lambda: self.app.quit())
@@ -61,12 +64,12 @@ class VentanaPrestamos(QMainWindow):
         code_user = self.user_code
         month = self.month_income.text()
         money = self.money.text()
-        number_pay = self.number_pay.text()
+        pay_month = self.pay_month.text()
         reason = self.reason.text()
         warranty = self.warranty.text()
-        self.loan = Loan(user, code_user, money, reason, month, warranty, number_pay, self.pay_record)
-        print('hola mundo')
-
+        self.loan = Loan(user, code_user, money, reason, month, warranty, pay_month, None)
+        QMessageBox.information(self.new_window, 'Confirmacion de solicitud', 'Se ha realizado la configuracion')
+        self.new_window.close()
 
     def search_user(self):
         code = self.user_code.text()
@@ -80,10 +83,91 @@ class VentanaPrestamos(QMainWindow):
                 pass
 
         QMessageBox.warning(self.new_window, 'Valor no encotrado', 'El codigo no se encuntra en el sistma')
+
     def add_loan(self):
         self.loans.append(self.loan)
         QMessageBox.information(self.new_window, 'Confirmacion', 'Se ha agregado el prestamo')
         self.new_window.close()
+
+    def pay_loan(self):
+        new_window = self.new_window
+        new_window.setWindowTitle('Aprobar prestamos')
+        new_window.setFixedSize(500, 400)
+        new_window.show()
+        layout_main = QHBoxLayout()
+        layoutV1 = QVBoxLayout()
+        layoutV2 = QVBoxLayout()
+        layout_main.addWidget(layoutV1)
+        widget_central = QWidget()
+        widget_central.setLayout(layout_main)
+        new_window.setCentralWidget(widget_central)
+
+
+        while True:
+            self.app.processEvents()
+
+    def search_loan(self):
+        code = self.Id.text()
+        for loan in self.loans:
+            if str(code) == loan.code:
+                loan.status = 'Aprovada'
+                QMessageBox.information(self.new_window, 'Los datos se encontraron', 'El codigo es correcto')
+                return 0
+            else:
+                pass
+
+    def search_loan_pay(self):
+        code = self.Id.text()
+        pay = self.pay_money.text()
+        for loan in self.loans:
+            if str(code) == loan.code:
+                loan.pay_act = int(loan.pay_act) - int(pay)
+                if loan.pay_act <= 0:
+                    self.pay_record1.append(pay)
+                    loan.status = 'Finalizado'
+                    loan.pay_record = self.pay_record1
+
+                else:
+                    self.pay_record1.append(pay)
+                    loan.status = 'En curso'
+                    loan.pay_record = self.pay_record1
+
+                QMessageBox.information(self.new_window, 'Pago efectuado', 'El pago se ha efectuado de manera correcta')
+                return 0
+
+            else:
+                pass
+
+        QMessageBox.warning(self.new_window, 'Valor no encotrado', 'El codigo no se encuntra en el sistma')
+
+    def approve_loan(self):
+        new_window = self.new_window
+        new_window.setWindowTitle('Aprobar prestamos')
+        new_window.setFixedSize(700, 500)
+        new_window.show()
+        layout_main = QHBoxLayout()
+        layoutV1 = QVBoxLayout()
+        layoutV2 = QVBoxLayout()
+        text1 = QLabel('Ingrese el Id del prestamo:')
+        text1.setAlignment(Qt.AlignVCenter)
+        self.Id = QLineEdit()
+        self.Id.setFixedSize(400, 30)
+        confirm = QPushButton('Confirmar')
+        confirm.setFixedSize(400, 30)
+        layoutV2.addWidget(text1)
+        layoutV2.addWidget(self.Id)
+        layoutV2.addWidget(confirm)
+        layoutV2.setAlignment(Qt.AlignHCenter)
+        layout_main.addWidget(layoutV1)
+        layout_main.addWidget(layoutV2)
+        widget_central = QWidget()
+        widget_central.setLayout(layout_main)
+        new_window.setCentralWidget(widget_central)
+        confirm.clicked.connect(self.approve_loan)
+
+        while True:
+            self.app.processEvents()
+
 
     def request_loan(self):
         new_window = self.new_window
@@ -113,8 +197,8 @@ class VentanaPrestamos(QMainWindow):
         self.month_income.setFixedSize(400, 20)
         self.money = QLineEdit()
         self.money.setFixedSize(400, 20)
-        self.number_pay = QLineEdit()
-        self.number_pay.setFixedSize(400, 20)
+        self.pay_month = QLineEdit()
+        self.pay_month.setFixedSize(400, 20)
         self.reason = QLineEdit()
         self.reason.setFixedSize(400, 20)
         self.warranty = QLineEdit()
@@ -126,7 +210,7 @@ class VentanaPrestamos(QMainWindow):
         show_layout.addWidget(text3)
         show_layout.addWidget(self.money)
         show_layout.addWidget(text4)
-        show_layout.addWidget(self.number_pay)
+        show_layout.addWidget(self.pay_month)
         show_layout.addWidget(text5)
         show_layout.addWidget(self.reason)
         show_layout.addWidget(text6)
@@ -145,15 +229,19 @@ class VentanaPrestamos(QMainWindow):
             self.app.processEvents()
 
     def show_loans(self):
-        new_window = QMainWindow()
+        new_window = self.new_window
         new_window.setWindowTitle('Mostrar prestamos')
         new_window.setFixedSize(800, 900)
         new_window.show()
         show_layoutV = QVBoxLayout()
         for loan in self.loans:
-            show = QLabel(loan)
+            show = QLabel(f'El asociado es: {loan.name}'
+                          f'El numero de prestamo es: {loan.code}'
+                          f'La cantidad del prestamo efectuado es: {loan.money}'
+                          f'El estado del prestamo es: {loan.status}')
+
             show.setAlignment(Qt.AlignHCenter)
-            show_layoutV.addWidget(show)
+            show_layoutV.addLayout(show)
 
         widget_central = QWidget()
         widget_central.setLayout(show_layoutV)
