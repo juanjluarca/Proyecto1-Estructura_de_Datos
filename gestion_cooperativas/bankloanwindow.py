@@ -1,7 +1,6 @@
 
-from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QPushButton, QLabel, QLineEdit, QMessageBox, QHBoxLayout
+from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QPushButton, QLabel, QLineEdit, QMessageBox, QHBoxLayout, QTableWidget, QTableWidgetItem
 from PyQt5.QtCore import Qt
-from PyQt5.uic import loadUi
 from list import List
 from loan import Loan
 
@@ -15,7 +14,6 @@ class VentanaPrestamos(QMainWindow):
         self.new_window = QMainWindow()
         self.usuarios = usuarios
         self.pay_record1 = List()
-
 
         # Crear layout principal
         layout_principal = QVBoxLayout()
@@ -55,6 +53,7 @@ class VentanaPrestamos(QMainWindow):
         boton_see.clicked.connect(self.show_loans)
         boton_plan.clicked.connect(self.add_loan)
         boton_approve.clicked.connect(self.approve_loan)
+        boton_buy.clicked.connect(self.pay_loan)
 
         # Cerrar la ventana principal al cerrar la secundaria
         self.destroyed.connect(lambda: self.app.quit())
@@ -92,16 +91,40 @@ class VentanaPrestamos(QMainWindow):
     def pay_loan(self):
         new_window = self.new_window
         new_window.setWindowTitle('Aprobar prestamos')
-        new_window.setFixedSize(500, 400)
+        new_window.setFixedSize(700, 500)
         new_window.show()
+        self.tableWidget = QTableWidget()
+        self.tableWidget.setRowCount(0)
+        self.tableWidget.setColumnCount(3)
+        self.tableWidget.setHorizontalHeaderLabels(["Código", "Nombre", "Estado"])
         layout_main = QHBoxLayout()
         layoutV1 = QVBoxLayout()
         layoutV2 = QVBoxLayout()
-        layout_main.addWidget(layoutV1)
+        layoutV1.addWidget(self.tableWidget)
+        text1 = QLabel('Ingrese el Id del prestamo:')
+        text1.setAlignment(Qt.AlignVCenter)
+        text2 = QLabel('Ingresa la cantidad a pagar')
+        text2.setAlignment(Qt.AlignVCenter)
+        self.Id = QLineEdit()
+        self.Id.setFixedSize(400, 30)
+        self.pay_money = QLineEdit()
+        self.pay_money.setFixedSize(400, 30)
+        confirm = QPushButton('Confirmar')
+        confirm.setFixedSize(400, 30)
+        layoutV2.addWidget(text1)
+        layoutV2.addWidget(self.Id)
+        layoutV2.addWidget(text2)
+        layoutV2.addWidget(self.pay_money)
+        layoutV2.addWidget(confirm)
+        layoutV2.setAlignment(Qt.AlignHCenter)
+        layoutV2.setAlignment(Qt.AlignVCenter)
+        layout_main.addLayout(layoutV1)
+        layout_main.addLayout(layoutV2)
         widget_central = QWidget()
         widget_central.setLayout(layout_main)
         new_window.setCentralWidget(widget_central)
-
+        confirm.clicked.connect(self.approve_loan)
+        self.inicializar_approve()
 
         while True:
             self.app.processEvents()
@@ -140,14 +163,39 @@ class VentanaPrestamos(QMainWindow):
 
         QMessageBox.warning(self.new_window, 'Valor no encotrado', 'El codigo no se encuntra en el sistma')
 
+    def inicializar_show(self):
+        row_position = self.tableWidget.rowCount()
+        for loan in self.loans:
+            self.tableWidget.insertRow(row_position)
+            self.tableWidget.setItem(row_position, 0, QTableWidgetItem(loan.code))
+            self.tableWidget.setItem(row_position, 1, QTableWidgetItem(loan.user))
+            self.tableWidget.setItem(row_position, 2, QTableWidgetItem(loan.user_code))
+            self.tableWidget.setItem(row_position, 2, QTableWidgetItem(loan.status))
+            self.tableWidget.setItem(row_position, 2, QTableWidgetItem(loan.money))
+            self.tableWidget.setItem(row_position, 2, QTableWidgetItem(loan.pay_act))
+
+
+    def inicializar_approve(self):
+        row_position = self.tableWidget.rowCount()
+        for loan in self.loans:
+            self.tableWidget.insertRow(row_position)
+            self.tableWidget.setItem(row_position, 0, QTableWidgetItem(loan.code))
+            self.tableWidget.setItem(row_position, 1, QTableWidgetItem(loan.user))
+            self.tableWidget.setItem(row_position, 2, QTableWidgetItem(loan.status))
+
     def approve_loan(self):
         new_window = self.new_window
         new_window.setWindowTitle('Aprobar prestamos')
         new_window.setFixedSize(700, 500)
         new_window.show()
+        self.tableWidget = QTableWidget()
+        self.tableWidget.setRowCount(0)
+        self.tableWidget.setColumnCount(3)
+        self.tableWidget.setHorizontalHeaderLabels(["Código", "Nombre", "Estado"])
         layout_main = QHBoxLayout()
         layoutV1 = QVBoxLayout()
         layoutV2 = QVBoxLayout()
+        layoutV1.addWidget(self.tableWidget)
         text1 = QLabel('Ingrese el Id del prestamo:')
         text1.setAlignment(Qt.AlignVCenter)
         self.Id = QLineEdit()
@@ -158,12 +206,14 @@ class VentanaPrestamos(QMainWindow):
         layoutV2.addWidget(self.Id)
         layoutV2.addWidget(confirm)
         layoutV2.setAlignment(Qt.AlignHCenter)
-        layout_main.addWidget(layoutV1)
-        layout_main.addWidget(layoutV2)
+        layoutV2.setAlignment(Qt.AlignVCenter)
+        layout_main.addLayout(layoutV1)
+        layout_main.addLayout(layoutV2)
         widget_central = QWidget()
         widget_central.setLayout(layout_main)
         new_window.setCentralWidget(widget_central)
         confirm.clicked.connect(self.approve_loan)
+        self.inicializar_approve()
 
         while True:
             self.app.processEvents()
@@ -233,16 +283,14 @@ class VentanaPrestamos(QMainWindow):
         new_window.setWindowTitle('Mostrar prestamos')
         new_window.setFixedSize(800, 900)
         new_window.show()
+        self.tableWidget = QTableWidget()
+        self.tableWidget.setRowCount(0)
+        self.tableWidget.setColumnCount(6)
+        self.tableWidget.setHorizontalHeaderLabels(["Código", "Nombre", "Codigo asociado", "Estado", "Cantidad prestamo", "Cantidad actual"])
         show_layoutV = QVBoxLayout()
-        for loan in self.loans:
-            show = QLabel(f'El asociado es: {loan.name}'
-                          f'El numero de prestamo es: {loan.code}'
-                          f'La cantidad del prestamo efectuado es: {loan.money}'
-                          f'El estado del prestamo es: {loan.status}')
-
-            show.setAlignment(Qt.AlignHCenter)
-            show_layoutV.addLayout(show)
-
+        show_layoutV.setAlignment(Qt.AlignHCenter)
+        show_layoutV.addWidget(self.tableWidget)
+        self.inicializar_show()
         widget_central = QWidget()
         widget_central.setLayout(show_layoutV)
         new_window.setCentralWidget(widget_central)
