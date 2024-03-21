@@ -4,11 +4,12 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QPushButton, QHBoxLayout
 from userswindow import VentanaUsuarios
 from bankloanwindow import VentanaPrestamos
-
+from AsociadosWindow import VentanaRegistroAsociado
 
 class MainWindow(QMainWindow):
     def __init__(self, app, usuarios):
         super().__init__()
+        self.ventana_1 = None
         self.ventana_3 = None
         self.app = app
         self.ventana_2 = None
@@ -67,15 +68,12 @@ class MainWindow(QMainWindow):
         boton_4.clicked.connect(self.close_and_save)
 
     def abrir_ventana_1(self):
-        """Abre una nueva ventana y la mantiene abierta hasta que se cierra manualmente."""
-        ventana_1 = QMainWindow()
-        ventana_1.setWindowTitle("Gestión de asociados")
-        ventana_1.setFixedSize(640, 480)
-        ventana_1.show()
-
+        self.ventana_1 = VentanaRegistroAsociado(self.app)
+        self.ventana_1.show()
         # Bucle para mantener la ventana abierta hasta que se cierre manualmente.
         while True:
             self.app.processEvents()
+
 
     def abrir_ventana_2(self):
         self.ventana_2 = VentanaPrestamos("Préstamos", self.app, self.usuarios)
