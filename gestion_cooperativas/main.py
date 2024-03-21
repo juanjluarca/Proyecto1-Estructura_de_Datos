@@ -7,7 +7,7 @@ from usuario import Usuario
 usuarios = List()
 value = random.randint(1000, 9999)
 value2 = random.randint(1000, 9999)
-usuario1 = Usuario('admin', 'admin', str(value), 'Francisco Isaac Gudiel Quemé',
+usuario1 = Usuario('admin', 'admin', '1000', 'Francisco Isaac Gudiel Quemé',
                    'Gerente', 'Activo')
 usuario2 = Usuario('example', 'example', str(value2), 'Jorge Escalante', 'Coordinador',
                    'Inactivo')

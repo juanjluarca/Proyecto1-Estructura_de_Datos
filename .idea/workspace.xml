@@ -5,9 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="52936dbc-7c7f-41a5-93d4-bedc5d7b3391" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/gestion_cooperativas/bankloanwindow.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gestion_cooperativas/loginwindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/gestion_cooperativas/loginwindow.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gestion_cooperativas/mainwindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/gestion_cooperativas/mainwindow.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gestion_cooperativas/loan.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/Proyecto1-Estructura_de_Datos.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gestion_cooperativas/bankloanwindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/gestion_cooperativas/bankloanwindow.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gestion_cooperativas/list.py" beforeDir="false" afterPath="$PROJECT_DIR$/gestion_cooperativas/list.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gestion_cooperativas/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/gestion_cooperativas/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,22 +31,23 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "customColor": "",
-  "associatedIndex": 7
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 7
+}</component>
   <component name="ProjectId" id="2dvxOxUFc6xkUieNL8su8DrD7gN" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "Juan-José"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Panchito&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;configurable.group.editor&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Proyecto1-Estructura_de_Datos" />

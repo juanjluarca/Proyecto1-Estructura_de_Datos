@@ -95,9 +95,9 @@ class List(Generic[T]):
         if index < 0 or index >= len(self):
             raise IndexError('La posición no existe')
         elif index == 0:
-            return self.shift()
-        elif index == len(self) - 1:
             return self.pop()
+        elif index == len(self) - 1:
+            return self.shift()
         else:
             current_node = self.find_at(index)
             previous_node = self.find_at(index - 1)
@@ -125,42 +125,7 @@ class List(Generic[T]):
         raise IndexError('La posición no existe')
 
     # Métodos auxiliares
-    def change_head_tail(self):
-        current = self.__head
-        current2 = self.__tail
-        previous = self.find_at(len(self) - 2)
-        if self.is_empty():
-            pass
-        elif len(self) == 1:
-            pass
-        else:
-            current2.next = self.__head.next
-            self.__head = current2
-            self.__tail = current
-            self.__tail.next = None
-            previous.next = self.__tail
 
-    def order_data(self):
-        container = list()
-        for data in self:
-            container.append(data)
-        container.sort()
-        for _ in self:
-            self.shift()
-        for data in container:
-            self.append(data)
-
-    def order_data2(self):
-        current = self.__head
-        current_index = 0
-        while current is not None:
-            next_node = current.next
-            while next_node is not None:
-                if current.data > next_node.data:
-                    current = current.next
-                    current_index += 1
-                else:
-                    current = current.next
 
     def is_empty(self):
         return self.__head is None and self.__tail is None
