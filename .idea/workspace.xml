@@ -5,19 +5,39 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9695ed1a-7916-4f8b-aa8e-d13a7eb46750" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/gestion_cooperativas/bankloanwindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/gestion_cooperativas/bankloanwindow.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gestion_cooperativas/loan.py" beforeDir="false" afterPath="$PROJECT_DIR$/gestion_cooperativas/loan.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gestion_cooperativas/Recibo de luz.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gestion_cooperativas/Recomndacion.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gestion_cooperativas/Save_loans.dat" beforeDir="false" afterPath="$PROJECT_DIR$/gestion_cooperativas/Save_loans.dat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gestion_cooperativas/objetos.txt" beforeDir="false" afterPath="$PROJECT_DIR$/gestion_cooperativas/objetos.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gestion_cooperativas/userswindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/gestion_cooperativas/userswindow.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "git-widget-placeholder": "develop"
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
+  <component name="ProjectId" id="2e04DD3B9PmPzhmDk1X2z9ac8Qb" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;develop&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Proyecto1-Estructura_de_Datos" />
@@ -46,7 +66,15 @@
       </list>
     </recent_temporary>
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="9695ed1a-7916-4f8b-aa8e-d13a7eb46750" name="Changes" comment="" />
+      <created>1711028041376</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1711028041376</updated>
+    </task>
     <servers />
   </component>
 </project>

@@ -1,6 +1,6 @@
 import sys
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QPushButton, QTableWidget, QLabel, QLineEdit, \
-    QTableWidgetItem, QDialog, QInputDialog, QHBoxLayout
+    QTableWidgetItem, QDialog, QInputDialog, QHBoxLayout, QMessageBox
 from usuario import Usuario
 from list import List
 from adduserwindow import AddUserDialog
@@ -31,10 +31,14 @@ class VentanaUsuarios(QMainWindow):
         self.modify_password_button = QPushButton("Modificar contraseña")
         self.modify_password_button.clicked.connect(self.modify_password)
 
+        self.delete_user_button = QPushButton("Eliminar usuario")
+        self.delete_user_button.clicked.connect(self.delete_user)
+
         horizontal_layout = QHBoxLayout()
         horizontal_layout.addWidget(self.add_user_button)
         horizontal_layout.addWidget(self.modify_button)
         horizontal_layout.addWidget(self.modify_password_button)
+        horizontal_layout.addWidget(self.delete_user_button)
 
         central_widget = QWidget()
         layout = QVBoxLayout()
@@ -126,3 +130,13 @@ class VentanaUsuarios(QMainWindow):
                     objeto_modificado = Usuario(email, objeto.password, objeto.usercode, name, job, status)
                     self.usuarios.prepend(objeto_modificado)
                     self.tableWidget.setItem(row, column, QTableWidgetItem(new_value))
+
+    def delete_user(self):
+        selected_items = self.tableWidget.selectedItems()
+        if selected_items:
+            for item in selected_items:
+                row = item.row()
+                column = item.column()
+                value = self.usuarios.remove_at(row)
+                QMessageBox.information(self, 'Usuario eliminado', f'Se ha eliminado el usuario {value.name}.')
+                self.tableWidget.removeRow(row)
