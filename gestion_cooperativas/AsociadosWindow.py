@@ -1,6 +1,8 @@
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QMessageBox
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QPushButton, QHBoxLayout, QDialog, QListWidget, QDialogButtonBox
 from PyQt5.QtWidgets import QApplication
+
+
 class Asociado:
     def __init__(self, nombre, direccion, telefonos, dpi, nit, archivos_adjuntos=None, referencias_personales=None):
         self.codigo_asociado = random.randint(1000, 9999)
@@ -25,7 +27,15 @@ class Asociado:
             self.nit = nit
 
     def agregar_archivo_adjunto(self, archivo):
-        self.archivos_adjuntos.append(archivo)
+        if os.path.isfile(archivo):  # Verificar si el archivo existe
+            with open(archivo, 'rb') as file:
+                contenido = file.read()
+            self.archivos_adjuntos.append(contenido)
+        else:
+            print(f"El archivo '{archivo}' no existe.")
+
+    def eliminar_archivos_adjuntos(self):
+        self.archivos_adjuntos.clear()
 
     def agregar_referencia_personal(self, referencia):
         self.referencias_personales.append(referencia)
@@ -97,10 +107,32 @@ class VentanaRegistroAsociado(QMainWindow):
         self.lista_asociados = QListWidget()
         layout.addWidget(self.lista_asociados)
 
+        btn_mostrar_asociados = QPushButton("Mostrar Todos los Asociados")
+        btn_mostrar_asociados.clicked.connect(self.mostrar_todos_asociados)
+        layout.addWidget(btn_mostrar_asociados)
+
         # Botón de eliminación
         btn_eliminar = QPushButton("Eliminar Cuenta")
         btn_eliminar.clicked.connect(self.abrir_ventana_eliminar_cuenta)
         layout.addWidget(btn_eliminar)
+
+        # Botón para cargar archivos adjuntos
+        btn_cargar_archivo = QPushButton("Cargar Archivo Adjunto")
+        btn_cargar_archivo.clicked.connect(self.cargar_archivo_adjunto)
+        layout.addWidget(btn_cargar_archivo)
+
+        btn_actualizar_datos = QPushButton("Actualizar Datos del Asociado")
+        btn_actualizar_datos.clicked.connect(self.actualizar_datos_asociado)
+        layout.addWidget(btn_actualizar_datos)
+
+        btn_agregar_recomendacion = QPushButton("Agregar Recomendación")
+        btn_agregar_recomendacion.clicked.connect(self.agregar_recomendacion)
+        layout.addWidget(btn_agregar_recomendacion)
+
+        self.lista_archivos_adjuntos = QListWidget()
+        layout.addWidget(self.lista_archivos_adjuntos)
+
+
 
     def registrar_asociado(self):
         nombre = self.input_nombre.text()
@@ -155,9 +187,11 @@ class VentanaRegistroAsociado(QMainWindow):
                                                 QMessageBox.Yes | QMessageBox.No)
             if confirmacion == QMessageBox.Yes:
                 if self.asociados.remove_asociado(asociado_a_eliminar):
+                    asociado_a_eliminar.eliminar_archivos_adjuntos()
                     QMessageBox.information(self, "Eliminación Exitosa", "La cuenta ha sido eliminada correctamente.")
                     # Actualizar la lista visual de asociados
                     self.actualizar_lista_asociados()
+                    self.lista_archivos_adjuntos.clear()
                 else:
                     QMessageBox.warning(self, "Error", "No se pudo encontrar el asociado con el código especificado.")
         else:
@@ -169,3 +203,128 @@ class VentanaRegistroAsociado(QMainWindow):
         # Volver a agregar los asociados restantes a la lista visual
         for asociado in self.asociados:
             self.lista_asociados.addItem(f"{asociado.nombre} - {asociado.codigo_asociado}")
+
+    def actualizar_datos_asociado(self):
+        try:
+            if self.lista_asociados.currentRow() >= 0:
+                asociado_index = self.lista_asociados.currentRow()
+                asociado_actual = self.asociados[asociado_index]
+
+                # Obtener los nuevos datos desde los campos de entrada
+                nuevo_nombre = self.input_nombre.text()
+                nueva_direccion = self.input_direccion.text()
+                nuevos_telefonos = self.input_telefonos.text()
+                nuevo_dpi = self.input_dpi.text()
+                nuevo_nit = self.input_nit.text()
+
+                # Actualizar los datos del asociado
+                asociado_actual.actualizar_datos(nombre=nuevo_nombre, direccion=nueva_direccion,
+                                                 telefonos=nuevos_telefonos,
+                                                 dpi=nuevo_dpi, nit=nuevo_nit)
+
+                # Actualizar la lista visual de asociados
+                self.actualizar_lista_asociados()
+
+                QMessageBox.information(self, "Actualización Exitosa",
+                                        "Los datos del asociado han sido actualizados correctamente.")
+            else:
+                QMessageBox.warning(self, "Error", "Seleccione un asociado antes de actualizar los datos.")
+        except Exception as e:
+            QMessageBox.critical(self, "Error",
+                                 f"Se ha producido un error al actualizar los datos del asociado: {str(e)}")
+
+    def actualizar_lista_archivos_adjuntos(self, asociado):
+        # Limpiar la lista visual de archivos adjuntos
+        self.lista_archivos_adjuntos.clear()
+        # Volver a agregar los archivos adjuntos del asociado a la lista visual
+        for archivo in asociado.archivos_adjuntos:
+            self.lista_archivos_adjuntos.addItem(f"Nombre del archivo: {archivo}")
+
+
+    def cargar_archivo_adjunto(self):
+        file_dialog = QFileDialog(self)
+        file_dialog.setModal(False)  # Establecer el diálogo como no modal
+        file_dialog.setNameFilter("Archivos PDF (*.pdf)")  # Filtrar archivos PDF
+        file_dialog.setViewMode(QFileDialog.Detail)
+
+        if file_dialog.exec_():
+            if self.lista_asociados.currentRow() >= 0:
+                asociado_index = self.lista_asociados.currentRow()
+                asociado_actual = self.asociados[asociado_index]
+
+                file_paths = file_dialog.selectedFiles()
+                pdf_path = file_paths[0]
+
+                try:
+                    if os.path.exists(pdf_path):
+                        with open(pdf_path, 'rb') as file:
+                            contenido = file.read()
+                        asociado_actual.archivos_adjuntos.append(contenido)
+                        QMessageBox.information(self, "Carga Exitosa",
+                                                "El archivo adjunto ha sido cargado exitosamente.")
+                        self.actualizar_lista_archivos_adjuntos(asociado_actual)  # Aquí se llama al método para actualizar la lista de archivos adjuntos
+                    else:
+                        QMessageBox.warning(self, "Error", "El archivo seleccionado no existe.")
+                except Exception as e:
+                    QMessageBox.warning(self, "Error", f"Error al cargar el archivo adjunto: {str(e)}")
+            else:
+                QMessageBox.warning(self, "Error", "Seleccione un asociado antes de cargar archivos adjuntos.")
+
+    def agregar_recomendacion(self):
+        file_dialog = QFileDialog(self)
+        file_dialog.setModal(False)  # Establecer el diálogo como no modal
+        file_dialog.setNameFilter("Archivos PDF (*.pdf)")  # Filtrar archivos PDF
+        file_dialog.setViewMode(QFileDialog.Detail)
+
+        if file_dialog.exec_():
+            if self.lista_asociados.currentRow() >= 0:
+                asociado_index = self.lista_asociados.currentRow()
+                asociado_actual = self.asociados[asociado_index]
+
+                file_paths = file_dialog.selectedFiles()
+                pdf_path = file_paths[0]
+
+                try:
+                    if os.path.exists(pdf_path):
+                        with open(pdf_path, 'rb') as file:
+                            contenido = file.read()
+                        asociado_actual.archivos_adjuntos.append(contenido)
+                        QMessageBox.information(self, "Carga Exitosa",
+                                                "La Recomendacion ha sido cargado exitosamente.")
+                        self.actualizar_lista_archivos_adjuntos(
+                            asociado_actual)
+                    else:
+                        QMessageBox.warning(self, "Error", "La recomendacion seleccionada no existe.")
+                except Exception as e:
+                    QMessageBox.warning(self, "Error", f"Error al cargar la Recomendacion: {str(e)}")
+            else:
+                QMessageBox.warning(self, "Error", "Seleccione un asociado antes de cargar la recomendacion.")
+
+    def mostrar_todos_asociados(self):
+        if len(self.asociados) == 0:
+            QMessageBox.information(self, "No hay asociados", "No hay asociados registrados.")
+            return
+
+        mensaje = "Todos los asociados registrados:\n\n"
+        for asociado in self.asociados:
+            mensaje += f"Código: {asociado.codigo_asociado}\n"
+            mensaje += f"Nombre: {asociado.nombre}\n"
+            mensaje += f"Dirección: {asociado.direccion}\n"
+            mensaje += f"Teléfonos: {asociado.telefonos}\n"
+            mensaje += f"DPI: {asociado.dpi}\n"
+            mensaje += f"NIT: {asociado.nit}\n"
+            if asociado.archivos_adjuntos:
+                mensaje += "Archivos Adjuntos:\n"
+                for adjunto in asociado.archivos_adjuntos:
+                    mensaje += f" - {adjunto}\n"
+            else:
+                mensaje += "Sin archivos adjuntos.\n"
+            if asociado.referencias_personales:
+                mensaje += "Recomendaciones:\n"
+                for recomendacion in asociado.referencias_personales:
+                    mensaje += f" - {recomendacion}\n"
+            else:
+                mensaje += "Sin recomendaciones.\n"
+            mensaje += "\n"
+
+        QMessageBox.information(self, "Todos los asociados", mensaje)
