@@ -5,8 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="52936dbc-7c7f-41a5-93d4-bedc5d7b3391" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/gestion_cooperativas/bankloanwindow.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gestion_cooperativas/loginwindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/gestion_cooperativas/loginwindow.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gestion_cooperativas/AsociadosWindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/gestion_cooperativas/AsociadosWindow.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gestion_cooperativas/mainwindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/gestion_cooperativas/mainwindow.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -27,10 +27,10 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "customColor": "",
-  "associatedIndex": 7
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 7
+}</component>
   <component name="ProjectId" id="2dvxOxUFc6xkUieNL8su8DrD7gN" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -40,7 +40,7 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "Juan-José"
+    "git-widget-placeholder": "Isaac"
   }
 }]]></component>
   <component name="RunManager">

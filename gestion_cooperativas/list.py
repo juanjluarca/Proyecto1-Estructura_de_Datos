@@ -162,6 +162,52 @@ class List(Generic[T]):
                 else:
                     current = current.next
 
+    def remove_asociado(self, asociado: T) -> bool:
+        current = self.__head
+        previous = None
+
+        while current:
+            if current.data == asociado:
+                if previous:
+                    previous.next = current.next
+                    if not current.next:
+                        self.__tail = previous
+                else:
+                    self.__head = current.next
+                    if not current.next:
+                        self.__tail = None
+                self.__size -= 1
+                return True
+            previous = current
+            current = current.next
+
+        return False
+    
+    def __getitem__(self, index: int) -> T:
+        if index < 0 or index >= len(self):
+            raise IndexError("Índice fuera de rango")
+        current_index = 0
+        current = self.__head
+        while current:
+            if current_index == index:
+                return current.data
+            current = current.next
+            current_index += 1
+        raise IndexError("Índice fuera de rango")
+
+    def __setitem__(self, index: int, value: T):
+        if index < 0 or index >= len(self):
+            raise IndexError("Índice fuera de rango")
+        current_index = 0
+        current = self.__head
+        while current:
+            if current_index == index:
+                current.data = value
+                return
+            current = current.next
+            current_index += 1
+        raise IndexError("Índice fuera de rango")
+
     def is_empty(self):
         return self.__head is None and self.__tail is None
 

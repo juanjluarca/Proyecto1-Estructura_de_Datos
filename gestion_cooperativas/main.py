@@ -5,6 +5,7 @@ from loginwindow import VentanaLogin
 from list import List
 from usuario import Usuario
 usuarios = List()
+asociados = List()
 value = random.randint(1000, 9999)
 value2 = random.randint(1000, 9999)
 usuario1 = Usuario('admin', 'admin', str(value), 'Francisco Isaac Gudiel Quemé',
