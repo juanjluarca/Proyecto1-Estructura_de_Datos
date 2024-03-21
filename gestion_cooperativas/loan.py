@@ -1,25 +1,15 @@
 import random
-from list import List
+
 class Loan:
-    def __init__(self, user, user_code, money, reason, month_income, warranty, plan_pay, record: List | None):
-        self.user = user
-        self.code = str(random.randint(1000, 9999))
-        self.user_code = user_code
-        self.status = 'Creado'
-        self.money = money
-        self.pay_act = money
-        self.amount_approved = reason
-        self.month_income = month_income
-        self.warranty = warranty
-        self.plan_pay = plan_pay
-        self.pay_record = record
-
-    def __str__(self):
-        result = (f'Cantidad del prestamo actual {self.money}\n'
-                  f'Numeros de pagos realizados {len(self.pay_record)}\n'
-                  f'Estado del prestamo {self.status}\n'
-                  f'Nombre del usuario que realizo el prestamo {self.user.name}\n'
-                  f'Ingresos mensuales del usuario {self.month_income}\n'
-                  f'El lapso de tiempo de pago es de {self.plan_pay}')
-
-        return result
+    def __init__(self, user, user_code, money, reason, month_income, warranty, plan_pay, record: str):
+        self.user1 = user
+        self.code1 = str(random.randint(1000, 9999))
+        self.user_code1 = user_code
+        self.status1 = 'Creado'
+        self.money1 = money
+        self.pay_act1 = money
+        self.amount_approved1 = reason
+        self.month_income1 = month_income
+        self.warranty1 = warranty
+        self.plan_pay1 = plan_pay
+        self.pay_record1 = record

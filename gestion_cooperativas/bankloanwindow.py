@@ -1,3 +1,4 @@
+import pickle
 
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QPushButton, QLabel, QLineEdit, QMessageBox, QHBoxLayout, QTableWidget, QTableWidgetItem
 from PyQt5.QtCore import Qt
@@ -13,7 +14,6 @@ class VentanaPrestamos(QMainWindow):
         self.loans = List()
         self.new_window = QMainWindow()
         self.usuarios = usuarios
-        self.pay_record1 = List()
 
         # Crear layout principal
         layout_principal = QVBoxLayout()
@@ -32,6 +32,10 @@ class VentanaPrestamos(QMainWindow):
         boton_see.setFixedSize(550, 40)
         boton_buy = QPushButton("Realizar pagos")
         boton_buy.setFixedSize(550, 40)
+        boton_load = QPushButton("Cargar prestamos")
+        boton_load.setFixedSize(550, 40)
+        boton_save = QPushButton("Guardar prestamos")
+        boton_save.setFixedSize(550, 40)
 
         # Agregar botón al layout
         layout_principal.addWidget(boton_loan)
@@ -39,6 +43,8 @@ class VentanaPrestamos(QMainWindow):
         layout_principal.addWidget(boton_approve)
         layout_principal.addWidget(boton_see)
         layout_principal.addWidget(boton_buy)
+        layout_principal.addWidget(boton_save)
+        layout_principal.addWidget(boton_load)
         layout_principal.addWidget(boton_cerrar)
         layout_principal.setAlignment(Qt.AlignHCenter)
 
@@ -54,6 +60,8 @@ class VentanaPrestamos(QMainWindow):
         boton_plan.clicked.connect(self.add_loan)
         boton_approve.clicked.connect(self.approve_loan)
         boton_buy.clicked.connect(self.pay_loan)
+        boton_save.clicked.connect(self.save_data)
+        boton_load.clicked.connect(self.load_data)
 
         # Cerrar la ventana principal al cerrar la secundaria
         self.destroyed.connect(lambda: self.app.quit())
@@ -66,7 +74,7 @@ class VentanaPrestamos(QMainWindow):
         pay_month = self.pay_month.text()
         reason = self.reason.text()
         warranty = self.warranty.text()
-        self.loan = Loan(user, code_user, money, reason, month, warranty, pay_month, None)
+        self.loan = Loan(user, code_user, money, reason, month, warranty, pay_month, '0')
         QMessageBox.information(self.new_window, 'Confirmacion de solicitud', 'Se ha realizado la configuracion')
         self.new_window.close()
 
@@ -84,9 +92,13 @@ class VentanaPrestamos(QMainWindow):
         QMessageBox.warning(self.new_window, 'Valor no encotrado', 'El codigo no se encuntra en el sistma')
 
     def add_loan(self):
-        self.loans.append(self.loan)
-        QMessageBox.information(self.new_window, 'Confirmacion', 'Se ha agregado el prestamo')
-        self.new_window.close()
+        money = int(self.money.text())
+        if money >= 5000:
+            QMessageBox.warning(self.new_window, 'Erro', 'El prestamo excede lo que aprueba la coperativa')
+        else:
+            self.loans.append(self.loan)
+            QMessageBox.information(self.new_window, 'Confirmacion', 'Se ha agregado el prestamo')
+            self.new_window.close()
 
     def pay_loan(self):
         new_window = self.new_window
@@ -96,7 +108,7 @@ class VentanaPrestamos(QMainWindow):
         self.tableWidget = QTableWidget()
         self.tableWidget.setRowCount(0)
         self.tableWidget.setColumnCount(3)
-        self.tableWidget.setHorizontalHeaderLabels(["Código", "Nombre", "Estado"])
+        self.tableWidget.setHorizontalHeaderLabels(["Código", "Cantidad prestamo", "Estado"])
         layout_main = QHBoxLayout()
         layoutV1 = QVBoxLayout()
         layoutV2 = QVBoxLayout()
@@ -123,19 +135,25 @@ class VentanaPrestamos(QMainWindow):
         widget_central = QWidget()
         widget_central.setLayout(layout_main)
         new_window.setCentralWidget(widget_central)
-        confirm.clicked.connect(self.approve_loan)
+        confirm.clicked.connect(self.search_loan_pay)
         self.inicializar_approve()
-
         while True:
             self.app.processEvents()
 
     def search_loan(self):
         code = self.Id.text()
+        print(code)
         for loan in self.loans:
-            if str(code) == loan.code:
-                loan.status = 'Aprovada'
-                QMessageBox.information(self.new_window, 'Los datos se encontraron', 'El codigo es correcto')
-                return 0
+            if str(code) == loan.code1:
+                if loan.status1 == 'Aprovado':
+                    QMessageBox.warning(self, 'Error', 'El prestamo ya fue aprobado')
+                    self.new_window.close()
+
+                else:
+                    loan.status1 = 'Aprovado'
+                    QMessageBox.information(self.new_window, 'Los datos se encontraron', 'El prestamo ha sido aprobado')
+                    self.new_window.close()
+                    return 0
             else:
                 pass
 
@@ -143,45 +161,51 @@ class VentanaPrestamos(QMainWindow):
         code = self.Id.text()
         pay = self.pay_money.text()
         for loan in self.loans:
-            if str(code) == loan.code:
-                loan.pay_act = int(loan.pay_act) - int(pay)
-                if loan.pay_act <= 0:
-                    self.pay_record1.append(pay)
-                    loan.status = 'Finalizado'
-                    loan.pay_record = self.pay_record1
-
+            if str(code) == loan.code1:
+                if loan.status1 == 'Creado':
+                    QMessageBox.warning(self.new_window, 'Error', 'El prestamo no ha sido aprobado')
                 else:
-                    self.pay_record1.append(pay)
-                    loan.status = 'En curso'
-                    loan.pay_record = self.pay_record1
+                    self.pay_act = int(loan.pay_act1) - int(pay)
+                    if self.pay_act <= 0:
+                        loan.pay_act1 = str(self.pay_act)
+                        loan.status1 = 'Finalizado'
+                        self.pay_record2 = int(loan.pay_record1) + 1
+                        loan.pay_record1 = str(self.pay_record2)
 
-                QMessageBox.information(self.new_window, 'Pago efectuado', 'El pago se ha efectuado de manera correcta')
-                return 0
+                    else:
+                        loan.pay_act1 = str(self.pay_act)
+                        loan.status1 = 'En curso'
+                        self.pay_record2 = int(loan.pay_record1) + 1
+                        loan.pay_record1 = str(self.pay_record2)
+
+                    QMessageBox.information(self.new_window, 'Pago efectuado', 'El pago se ha efectuado de manera correcta')
+                    self.new_window.close()
+                    return 0
 
             else:
                 pass
-
-        QMessageBox.warning(self.new_window, 'Valor no encotrado', 'El codigo no se encuntra en el sistma')
 
     def inicializar_show(self):
         row_position = self.tableWidget.rowCount()
         for loan in self.loans:
             self.tableWidget.insertRow(row_position)
-            self.tableWidget.setItem(row_position, 0, QTableWidgetItem(loan.code))
-            self.tableWidget.setItem(row_position, 1, QTableWidgetItem(loan.user))
-            self.tableWidget.setItem(row_position, 2, QTableWidgetItem(loan.user_code))
-            self.tableWidget.setItem(row_position, 2, QTableWidgetItem(loan.status))
-            self.tableWidget.setItem(row_position, 2, QTableWidgetItem(loan.money))
-            self.tableWidget.setItem(row_position, 2, QTableWidgetItem(loan.pay_act))
+            self.tableWidget.setItem(row_position, 0, QTableWidgetItem(loan.code1))
+            self.tableWidget.setItem(row_position, 1, QTableWidgetItem(loan.user1))
+            self.tableWidget.setItem(row_position, 2, QTableWidgetItem(loan.user_code1))
+            self.tableWidget.setItem(row_position, 3, QTableWidgetItem(loan.status1))
+            self.tableWidget.setItem(row_position, 4, QTableWidgetItem(loan.money1))
+            self.tableWidget.setItem(row_position, 5, QTableWidgetItem(loan.pay_act1))
+            self.tableWidget.setItem(row_position, 6, QTableWidgetItem(loan.pay_record1))
+
 
 
     def inicializar_approve(self):
         row_position = self.tableWidget.rowCount()
         for loan in self.loans:
             self.tableWidget.insertRow(row_position)
-            self.tableWidget.setItem(row_position, 0, QTableWidgetItem(loan.code))
-            self.tableWidget.setItem(row_position, 1, QTableWidgetItem(loan.user))
-            self.tableWidget.setItem(row_position, 2, QTableWidgetItem(loan.status))
+            self.tableWidget.setItem(row_position, 0, QTableWidgetItem(loan.code1))
+            self.tableWidget.setItem(row_position, 1, QTableWidgetItem(loan.pay_act1))
+            self.tableWidget.setItem(row_position, 2, QTableWidgetItem(loan.status1))
 
     def approve_loan(self):
         new_window = self.new_window
@@ -212,7 +236,7 @@ class VentanaPrestamos(QMainWindow):
         widget_central = QWidget()
         widget_central.setLayout(layout_main)
         new_window.setCentralWidget(widget_central)
-        confirm.clicked.connect(self.approve_loan)
+        confirm.clicked.connect(self.search_loan)
         self.inicializar_approve()
 
         while True:
@@ -285,8 +309,8 @@ class VentanaPrestamos(QMainWindow):
         new_window.show()
         self.tableWidget = QTableWidget()
         self.tableWidget.setRowCount(0)
-        self.tableWidget.setColumnCount(6)
-        self.tableWidget.setHorizontalHeaderLabels(["Código", "Nombre", "Codigo asociado", "Estado", "Cantidad prestamo", "Cantidad actual"])
+        self.tableWidget.setColumnCount(7)
+        self.tableWidget.setHorizontalHeaderLabels(["Código", "Nombre", "Codigo asociado", "Estado", "Cantidad prestamo", "Cantidad actual", "Pagos efectuados"])
         show_layoutV = QVBoxLayout()
         show_layoutV.setAlignment(Qt.AlignHCenter)
         show_layoutV.addWidget(self.tableWidget)
@@ -294,10 +318,24 @@ class VentanaPrestamos(QMainWindow):
         widget_central = QWidget()
         widget_central.setLayout(show_layoutV)
         new_window.setCentralWidget(widget_central)
-
-
         while True:
             self.app.processEvents()
+
+    def load_data(self):
+        try:
+            with open('Save_loans.dat', 'rb') as file:
+                self.loans = pickle.load(file)
+                QMessageBox.information(self.new_window, 'Carga prestamos', 'Los prestamos se han cargado')
+        except FileNotFoundError:
+            QMessageBox.warning(self.new_window, 'Erro', 'El archivo no se ha encontrado')
+
+    def save_data(self):
+        with open('Save_loans.dat', 'wb') as file:
+            pickle.dump(self.loans, file)
+        QMessageBox.information(self.new_window, 'Guardar prestamos', 'Los prestamos se han guardado')
+
+
+
 
 
 
