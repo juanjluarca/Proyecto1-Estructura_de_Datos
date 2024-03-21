@@ -2,7 +2,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QPushButton, QHBoxLayout
 from userswindow import VentanaUsuarios
 from bankloanwindow import VentanaPrestamos
-
+from AsociadosWindow import VentanaRegistroAsociado
 
 class MainWindow(QMainWindow):
     def __init__(self, app, usuarios):
@@ -60,7 +60,7 @@ class MainWindow(QMainWindow):
         boton_3.clicked.connect(self.abrir_ventana_3)
 
     def abrir_ventana_1(self):
-        self.ventana_1 = VentanaRegistroAsociado("Asociados", self.app)
+        self.ventana_1 = VentanaRegistroAsociado(self.app)
         self.ventana_1.show()
         # Bucle para mantener la ventana abierta hasta que se cierre manualmente.
         while True:

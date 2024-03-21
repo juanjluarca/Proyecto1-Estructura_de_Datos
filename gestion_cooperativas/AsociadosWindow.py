@@ -1,6 +1,11 @@
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QMessageBox
+import os
+
+from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, \
+    QMessageBox, QFileDialog
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QPushButton, QHBoxLayout, QDialog, QListWidget, QDialogButtonBox
 from PyQt5.QtWidgets import QApplication
+import random
+from list import List
 
 
 class Asociado:
@@ -50,8 +55,6 @@ class Asociado:
                 lista_asociados.remove(asociado)
                 return True
         return False
-
-
 
 
 class VentanaRegistroAsociado(QMainWindow):
