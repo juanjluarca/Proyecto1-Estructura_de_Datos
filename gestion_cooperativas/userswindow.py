@@ -81,15 +81,16 @@ class VentanaUsuarios(QMainWindow):
             for item in selected_items:
                 row = item.row()
                 column = item.column()
+                value = self.usuarios.remove_at(row)
                 new_value, ok = QInputDialog.getText(self, "Modificar Contraseña",
-                                                     f"Ingrese la nueva contraseña de {self.usuarios.remove_at(row).name}:")
+                                                     f"Ingrese la nueva contraseña de {value.name}:")
                 if ok:
                     if row == 0:
-                        objeto = self.usuarios.pop()
+                        objeto = value
                     elif row == len(self.usuarios) - 1:
-                        objeto = self.usuarios.shift()
+                        objeto = value
                     else:
-                        objeto = self.usuarios.remove_at(row)
+                        objeto = value
                     password = new_value
                     objeto_modificado = Usuario(objeto.email, password, objeto.usercode, objeto.name, objeto.job, objeto.status)
                     self.usuarios.prepend(objeto_modificado)
