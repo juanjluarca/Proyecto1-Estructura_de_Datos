@@ -31,19 +31,14 @@ class Asociado:
         if nit:
             self.nit = nit
 
-    def agregar_archivo_adjunto(self, archivo):
-        if os.path.isfile(archivo):  # Verificar si el archivo existe
-            with open(archivo, 'rb') as file:
-                contenido = file.read()
-            self.archivos_adjuntos.append(contenido)
-        else:
-            print(f"El archivo '{archivo}' no existe.")
+    def agregar_archivo_adjunto(self, archivo_nombre):
+        self.archivos_adjuntos.append(archivo_nombre)
 
     def eliminar_archivos_adjuntos(self):
         self.archivos_adjuntos.clear()
 
-    def agregar_referencia_personal(self, referencia):
-        self.referencias_personales.append(referencia)
+    def agregar_referencia_personal(self, nombre_recomendacion):
+        self.referencias_personales.append(nombre_recomendacion)
 
     def eliminar_referencia_personal(self, referencia):
         if referencia in self.referencias_personales:
@@ -134,6 +129,9 @@ class VentanaRegistroAsociado(QMainWindow):
 
         self.lista_archivos_adjuntos = QListWidget()
         layout.addWidget(self.lista_archivos_adjuntos)
+
+        self.lista_referencias_personales = QListWidget()
+        layout.addWidget(self.lista_referencias_personales)
 
 
 
@@ -243,11 +241,17 @@ class VentanaRegistroAsociado(QMainWindow):
         for archivo in asociado.archivos_adjuntos:
             self.lista_archivos_adjuntos.addItem(f"Nombre del archivo: {archivo}")
 
+    def actualizar_lista_refencias_personales(self, asociado):
+        # Limpiar la lista visual de archivos adjuntos
+        self.lista_referencias_personales.clear()
+        # Volver a agregar los archivos adjuntos del asociado a la lista visual
+        for archivo in asociado.referencias_personales:
+            self.lista_referencias_personales.addItem(f"Nombre del archivo: {archivo}")
 
     def cargar_archivo_adjunto(self):
         file_dialog = QFileDialog(self)
-        file_dialog.setModal(False)  # Establecer el diálogo como no modal
-        file_dialog.setNameFilter("Archivos PDF (*.pdf)")  # Filtrar archivos PDF
+        file_dialog.setModal(False)
+        file_dialog.setNameFilter("Archivos PDF (*.pdf)")
         file_dialog.setViewMode(QFileDialog.Detail)
 
         if file_dialog.exec_():
@@ -260,12 +264,12 @@ class VentanaRegistroAsociado(QMainWindow):
 
                 try:
                     if os.path.exists(pdf_path):
-                        with open(pdf_path, 'rb') as file:
-                            contenido = file.read()
-                        asociado_actual.archivos_adjuntos.append(contenido)
+                        # Guardar solo el nombre del archivo adjunto
+                        nombre_archivo = os.path.basename(pdf_path)
+                        asociado_actual.agregar_archivo_adjunto(nombre_archivo)
                         QMessageBox.information(self, "Carga Exitosa",
                                                 "El archivo adjunto ha sido cargado exitosamente.")
-                        self.actualizar_lista_archivos_adjuntos(asociado_actual)  # Aquí se llama al método para actualizar la lista de archivos adjuntos
+                        self.actualizar_lista_archivos_adjuntos(asociado_actual)
                     else:
                         QMessageBox.warning(self, "Error", "El archivo seleccionado no existe.")
                 except Exception as e:
@@ -275,8 +279,8 @@ class VentanaRegistroAsociado(QMainWindow):
 
     def agregar_recomendacion(self):
         file_dialog = QFileDialog(self)
-        file_dialog.setModal(False)  # Establecer el diálogo como no modal
-        file_dialog.setNameFilter("Archivos PDF (*.pdf)")  # Filtrar archivos PDF
+        file_dialog.setModal(False)
+        file_dialog.setNameFilter("Archivos PDF (*.pdf)")
         file_dialog.setViewMode(QFileDialog.Detail)
 
         if file_dialog.exec_():
@@ -289,17 +293,16 @@ class VentanaRegistroAsociado(QMainWindow):
 
                 try:
                     if os.path.exists(pdf_path):
-                        with open(pdf_path, 'rb') as file:
-                            contenido = file.read()
-                        asociado_actual.archivos_adjuntos.append(contenido)
+                        # Guardar solo el nombre del archivo adjunto
+                        nombre_recomendacion = os.path.basename(pdf_path)
+                        asociado_actual.agregar_referencia_personal(nombre_recomendacion)
                         QMessageBox.information(self, "Carga Exitosa",
                                                 "La Recomendacion ha sido cargado exitosamente.")
-                        self.actualizar_lista_archivos_adjuntos(
-                            asociado_actual)
+                        self.actualizar_lista_refencias_personales(asociado_actual)
                     else:
-                        QMessageBox.warning(self, "Error", "La recomendacion seleccionada no existe.")
+                        QMessageBox.warning(self, "Error", "La recomendacion selecccionada no existe.")
                 except Exception as e:
-                    QMessageBox.warning(self, "Error", f"Error al cargar la Recomendacion: {str(e)}")
+                    QMessageBox.warning(self, "Error", f"Error al cargar La recomendacion: {str(e)}")
             else:
                 QMessageBox.warning(self, "Error", "Seleccione un asociado antes de cargar la recomendacion.")
 
