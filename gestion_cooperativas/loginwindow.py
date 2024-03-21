@@ -59,7 +59,7 @@ class VentanaLogin(QMainWindow):
         email = self.input_email.text()
         password = self.input_password.text()
         for usuario in self.usuarios:
-            if email == usuario.email and password == usuario.password:
+            if email == usuario.email and password == usuario.password and usuario.status == "Activo":
                 self.close()
                 window = MainWindow(self.app, self.usuarios)
                 window.show()
@@ -67,6 +67,6 @@ class VentanaLogin(QMainWindow):
                     self.app.processEvents()
             else:
                 pass
-        QMessageBox.warning(self, "Inicio de Sesión", "Usuario o contraseña incorrectos")
+        QMessageBox.warning(self, "Inicio de Sesión", "Usuario o contraseña incorrectos o usuario inactivo")
 
 

@@ -95,9 +95,9 @@ class List(Generic[T]):
         if index < 0 or index >= len(self):
             raise IndexError('La posición no existe')
         elif index == 0:
-            return self.shift()
-        elif index == len(self) - 1:
             return self.pop()
+        elif index == len(self) - 1:
+            return self.shift()
         else:
             current_node = self.find_at(index)
             previous_node = self.find_at(index - 1)
